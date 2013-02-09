@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="{64997A1B-3E51-4C6D-9D57-B91A49D17420}" Name="GravatarSync" Language="1033" Version="1.0.0.0" Manufacturer="Stephen ONeal" UpgradeCode="422bb9f9-fc3f-449c-9920-a3700ecfec31">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes"/>
+
+		<Feature Id="ProductFeature" Title="Installer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="GravatarSync">
+          <Directory Id="NETLOGON" Name="NetLogon">
+
+          </Directory>
+        </Directory>
+			</Directory>
+		</Directory>
+	</Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="GravatarSync.exe" Guid="{64919C59-D456-472F-B51C-8E2F81B6E171}">
+        <File Id="GravatarSync.exe"
+              Name="GravatarSync.exe"
+              Source="..\GravatarSync\bin\$(var.Configuration)\GravatarSync.exe"
+              />
+        <ServiceInstall Id="GravatarSyncInstall"
+                        Name="GravatarSync"
+                        DisplayName="GravatarSync"
+                        Description="Syncs Gravatar images to active directory"
+                        Type="ownProcess"
+                        Start="auto"
+                        ErrorControl="ignore"></ServiceInstall>
+        <ServiceControl Id="GravatarControl" Name="GravatarSync" Remove="uninstall"/>
+
+      </Component>
+      <Component Id="gravatarsync.exe.config" Guid="{336363A9-155D-468D-851F-99D94B66ECA4}">
+        <File Id="gravatarsync.exe.config"
+              Name="GravatarSync.exe.config"
+              Source="..\GravatarSync\bin\$(var.Configuration)\GravatarSync.exe.config"/>
+
+      </Component>
+    </ComponentGroup>
+
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="AdditionalComponents" Directory="NETLOGON">
+      <Component Id="usertile.exe" Guid="{E4BADB37-ABBD-40C4-92CF-8EE3B8E0B8F6}">
+        <File Id="usertile.exe"
+                 Name="usertile.exe"
+                 Source="..\usertile\bin\$(var.Configuration)\usertile.exe"
+                 />
+      </Component>
+      <Component Id="usertile.ps1" Guid="{751F869F-C525-4363-9067-5D51C98183EE}">
+        <File Id="usertile.ps1"
+              Name="usertile.ps1"
+              Source="..\usertile\usertile.ps1"
+              />
+      </Component>
+
+    </ComponentGroup>
+  </Fragment>
+</Wix>
